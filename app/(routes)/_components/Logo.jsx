@@ -7,8 +7,8 @@ const Logo = () => {
       <Image
         src={"/Microsoft_Loop_logo.svg.png"}
         alt="logo"
-        width={45}
-        height={45}
+        width={40}
+        height={40}
       />{" "}
       <span className="text-xl font-bold">Loop</span>
     </div>
