@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { AlignCenter, LayoutGridIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const WorkSpaceList = () => {
   const { user } = useUser();
