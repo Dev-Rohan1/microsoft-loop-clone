@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CoverOption from "../_components/_shared/coverOption";
-import Image from "next/image";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useState } from "react";
+import CoverOption from "../_components/_shared/coverOption";
 
 function CoverPicker({ children, setNewCover }) {
   const [selectedCover, setSelectedCover] = useState();
