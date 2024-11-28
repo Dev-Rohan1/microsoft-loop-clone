@@ -1,16 +1,52 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SmilePlus } from "lucide-react";
+import { Loader2, SmilePlus } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import CoverPicker from "../_components/CoverPicker";
 import EmojiPickerComponent from "../_components/EmojiPickerComponent";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const createWorkSpace = () => {
   const [cover, setCover] = useState("/cover.png");
   const [workspaceName, setWorkSpaceName] = useState();
   const [emojiIcon, setEmojiIcon] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const { user } = useUser();
+  const { orgId } = useAuth();
+
+  const router = useRouter();
+
+  const onCreateWorkSpace = async () => {
+    try {
+      setLoading(true);
+
+      const docId = Date.now();
+
+      const result = await setDoc(doc(db, "WorkSpace", docId.toString()), {
+        workspaceName: workspaceName,
+        emojiIcon: emojiIcon,
+        coverImage: cover,
+        createBy: user.primaryEmailAddress?.emailAddress,
+        id: docId,
+        orgId: orgId ? orgId : primaryEmailAddress?.emailAddress,
+      });
+      setLoading(false);
+
+      toast.success("Workspace Created Successfully");
+
+      router.replace("workspace/" + docId);
+    } catch (err) {
+      toast.error("Workspace Creation Failed!");
+    }
+  };
+
   return (
     <div className="p-10 md:px-36 lg:px-64 xl:px96 py-28">
       <div className="shadow-md rounded-xl">
@@ -55,7 +91,12 @@ const createWorkSpace = () => {
             />
           </div>
           <div className="mt-7 flex justify-end gap-2">
-            <Button disabled={!workspaceName?.length}>Create</Button>
+            <Button
+              disabled={!workspaceName?.length || loading}
+              onClick={onCreateWorkSpace}
+            >
+              Create{loading && <Loader2 className="animate-spin ml-1" />}
+            </Button>
             <Button variant="outline">Cancle</Button>
           </div>
         </div>
